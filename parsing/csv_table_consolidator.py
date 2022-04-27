@@ -1,15 +1,15 @@
 import sys
-#sys.path.append('../')
 
 from splitter import Splitter 
 from optparse import OptionParser, OptionError
-#from options import check_required
 
 import csv
 import os
 
 
 class Options(OptionParser):
+
+   required = ['src_file']
 
    def __init__(self):
       OptionParser.__init__(self)
@@ -19,9 +19,12 @@ class Options(OptionParser):
 
 
    def parse(self, argv):
-      (opts, args) = OptionParser.parse_args(self, argv[1:])
-     
-      check_required(opts, 'src_file')
+      # parser = OptionParser()
+      (opts, args) = self.parse_args(argv[1:])
+
+      for r in self.required:
+         if opts.__dict__[r] is None:
+            self.error(f"parameter {r} required")
 
       self.__dict__.update(opts.__dict__)
 
@@ -40,16 +43,16 @@ class FieldConsolidator:
       self._sep = separator
 
    def result(self):
-     result = {}
-     for row in self._table:
-        key = row[self._col_key]
-        value = row[self._col_value]
-        if key in result: 
+      result = {}
+      for row in self._table:
+         key = row[self._col_key]
+         value = row[self._col_value]
+         if key in result:
             result[key] = self._sep.join([result[key], value])
-        else:
-            result[key] = value      
+         else:
+            result[key] = value
 
-     return result
+      return result
       
 
 PREF_COUNTRY_NAME, PREF_DIALLED, PREF_CODES, PREF_MSN, PREF_OPERATOR_NAME = range (0,5)
@@ -87,12 +90,10 @@ def open_csv(filename, skip_header=False, delimiter_value=','):
 
    csv_table = []
 
-   file_in = csv.reader(open(filename,'r'), delimiter=delimiter_value)
-
+   fin = csv.reader(open(filename,'r'), delimiter=delimiter_value)
    if skip_header: 
-      file_in.next()
-
-   for row in file_in:
+      fin.next()
+   for row in fin:
       csv_table.append(row)
       
    return csv_table
@@ -100,10 +101,9 @@ def open_csv(filename, skip_header=False, delimiter_value=','):
 
 def write_csv(rows, filename):
 
-   csv_output = open(filename, "w")
-   wr = csv.writer(csv_output, quoting=csv.QUOTE_ALL)
-   wr.writerows(rows) 
-   csv_output.close()
+   with open(filename, "w") as f:
+      wr = csv.writer(f, quoting=csv.QUOTE_ALL)
+      wr.writerows(rows) 
 
 
 def main(argv):
@@ -118,9 +118,7 @@ def main(argv):
       out_file = 'target_' + filename
 
    csv_table = open_csv(filename)
-
    result_data = process(csv_table)
-
    write_csv(result_data, out_file)
  
 

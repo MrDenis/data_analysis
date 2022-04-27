@@ -33,7 +33,7 @@ class test_consolidate(unittest.TestCase):
       self.assertEqual(result['UKRAS'], '63')
 
    # this test has nothing to conslidate
-   def test_fake (self) :
+   def test_when_no_agg (self) :
 
       items = [['UKRKS', '67'],
                ['UKRUM', '50'],

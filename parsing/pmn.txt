@@ -1,0 +1,4 @@
+'UKRKS';'data';'67';'col3'
+'UKRUM';'data';'50';'col3'
+'UKRAS';'data';'63';'col3'
+'UKRUM';'data';'66';'col3'
