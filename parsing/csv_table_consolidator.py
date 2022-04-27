@@ -19,7 +19,6 @@ class Options(OptionParser):
 
 
    def parse(self, argv):
-      # parser = OptionParser()
       (opts, args) = self.parse_args(argv[1:])
 
       for r in self.required:
