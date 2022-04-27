@@ -1,7 +1,10 @@
 # data_analysis
 
-# parsing
+## dependencies
+``` pip install -r requirements.txt ```
 
-## To run unit tests, run:
+## parsing
+
+### To run unit tests, run:
 ``` python -m unittest discover ```
 
