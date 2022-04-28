@@ -38,19 +38,17 @@ class FieldConsolidator:
                 key=0, value=1, separator=';'):
 
       self._table = table
-      self._col_key = key
-      self._col_value = value
+      self._K = key
+      self._V = value
       self._sep = separator
 
    def result(self):
       result = {}
       for row in self._table:
-         key = row[self._col_key]
-         value = row[self._col_value]
-         if key in result:
-            result[key] = self._sep.join([result[key], value])
-         else:
-            result[key] = value
+         key, value = row[self._K], row[self._V]
+         current = result.setdefault(key, "").split()
+         current.append(value)
+         result[key] = self._sep.join(current)
 
       return result
       
@@ -131,24 +129,3 @@ def main(argv):
 
 if __name__ == '__main__':
    sys.exit(main(sys.argv))
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
