@@ -1,5 +1,3 @@
-
-
 class Splitter:
    '''iterator that groups table by some txt field '''
    def __init__(self, items, column=0):
@@ -23,7 +21,7 @@ class Splitter:
             field = i[self._col]             
          elif field != i[self._col]:
             break 
-         n = n + 1  
+         n += 1  
 
       #return values
       b = self._b

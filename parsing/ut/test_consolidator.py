@@ -3,7 +3,7 @@ import unittest
 import sys
 sys.path.append('../')
 
-from csv_table_consolidator import FieldConsolidator
+from pmn_table_consolidator import FieldConsolidator
 
 def test_consolidator(items, col_unique=0, col_value=1, sep=';'):
    '''returns dict consolidate prefixes splitted by ';' in one field for the same operator

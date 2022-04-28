@@ -9,7 +9,8 @@ import os
 
 class Options(OptionParser):
 
-   required = ['src_file']
+   # required = ['src_file']
+   required = []
 
    def __init__(self):
       OptionParser.__init__(self)
@@ -34,11 +35,11 @@ class FieldConsolidator:
        returns dictionary: key; consolidated value
    ''' 
    def __init__(self, table, 
-                column_key=0, column_value=1, separator=';'):
+                key=0, value=1, separator=';'):
 
       self._table = table
-      self._col_key = column_key
-      self._col_value = column_value
+      self._col_key = key
+      self._col_value = value
       self._sep = separator
 
    def result(self):
@@ -69,27 +70,31 @@ def process(csv_table):
 
    for country_name, items in splitter:
       # consolidate table that related to one country 
-      consolidated_items = FieldConsolidator(items, column_key=PREF_OPERATOR_NAME, column_value=PREF_CODES)
+      consolidated_items = FieldConsolidator(items, 
+         key=PREF_OPERATOR_NAME, 
+         value=PREF_CODES)
       result = consolidated_items.result()
-
       # group by operator name
       splitter_pmn = Splitter(items, column=PREF_OPERATOR_NAME)
 
       for operator_name, pmn_items in splitter_pmn :
+         # splitter returns list of rows matched to given operator name
+         # for consolidated data pick first
          target_line = pmn_items[0]
-         target_line[2] = result[operator_name]
+         # replace single prefix with string "pref1;pref2;...;prefN"
+         target_line[PREF_CODES] = result[operator_name]
          target_csv.append(target_line)
 
    return target_csv 
 
 
 
-def open_csv(filename, skip_header=False, delimiter_value=','):
+def open_csv(filename, skip_header=False, delimiter=','):
    '''opens csv file and put all contents to list'''
 
    csv_table = []
 
-   fin = csv.reader(open(filename,'r'), delimiter=delimiter_value)
+   fin = csv.reader(open(filename,'r'), delimiter=delimiter)
    if skip_header: 
       fin.next()
    for row in fin:
@@ -110,15 +115,18 @@ def main(argv):
    opts = Options()
    opts.parse(argv)
           
-   filename = opts.src_file
+   filename = opts.src_file or 'pmn.txt'
    out_file = opts.out_file
 
    if not out_file: 
       out_file = 'target_' + filename
 
-   csv_table = open_csv(filename)
+   csv_table = open_csv(filename, delimiter=';')
+   print(f"csv_table={csv_table}")
    result_data = process(csv_table)
+
    write_csv(result_data, out_file)
+   print(f"\nresult={result_data}") 
  
 
 if __name__ == '__main__':

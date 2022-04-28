@@ -1,4 +1,6 @@
-'UKRKS';'data';'67';'col3'
-'UKRUM';'data';'50';'col3'
-'UKRAS';'data';'63';'col3'
-'UKRUM';'data';'66';'col3'
+Ukraine;380;67;data;UKRKS
+Ukraine;380;98;data;UKRKS
+Ukraine;380;50;data;UKRUM
+Ukraine;380;95;data;UKRUM
+Ukraine;380;66;data;UKRUM
+Ukraine;380;63;data;URKAS
